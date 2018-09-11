@@ -22,10 +22,14 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved ) {
 	if ( fdwReason == DLL_PROCESS_ATTACH ) {
 		char sysdir[255], path[255];
 		GetSystemDirectory( sysdir, 254 );
-		sprintf( path, "%s\\xinput1_3.dll", sysdir );
+		sprintf( path, "%s\\xinput1_3.old.dll", sysdir );
 		mHinstDLL = LoadLibrary( path );
-		if ( !mHinstDLL )
-			return ( FALSE );
+		if (!mHinstDLL) {
+			sprintf(path, "%s\\xinput1_3.dll", sysdir);
+			mHinstDLL = LoadLibrary(path);
+			if (!mHinstDLL) return FALSE;
+		}
+
 
 		for ( int i = 0; i < 12; i++ )
 			mProcs[ i ] = GetProcAddress( mHinstDLL, mImportNames[ i ] );

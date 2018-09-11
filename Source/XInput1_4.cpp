@@ -57,16 +57,18 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved ) {
 	if (fdwReason == DLL_PROCESS_ATTACH) {
 		char sysdir[255], path[255];
 		GetSystemDirectory( sysdir, 254 );
-		sprintf( path, "%s\\XInput1_4.dll", sysdir );
+		sprintf( path, "%s\\XInput1_4.old.dll", sysdir );
 		printf("XInput path: %s\n", path);
 		mHinstDLL = LoadLibrary(path);
-		MessageBox(nullptr, path, "HERE", MB_OK);
 		if (!mHinstDLL) {
-			MessageBox(nullptr, "Error loading library.", "", MB_OK);
-			char buffer[500];
-			printf("LoadLibrary failed\n");
-			printf("error: %s\n", getLastErrorText(buffer, sizeof(buffer)));
-			return (FALSE);
+			sprintf(path, "%s\\XInput1_4.dll", sysdir);
+			mHinstDLL = LoadLibrary(path);
+			if (!mHinstDLL) {
+				char buffer[500];
+				printf("LoadLibrary failed\n");
+				printf("error: %s\n", getLastErrorText(buffer, sizeof(buffer)));
+				return (FALSE);
+			}
 		}
 
 		for ( int i = 0; i < 14; i++ )
